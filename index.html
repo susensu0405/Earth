@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北市大暑期地球科學課程計畫 - 地震學、地球物理與 AI／Agent 輔助教學實作</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --primary-light: #2b6cb0;
+            --accent-color: #dd6b20;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --bg-main: #f7fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+
+        /* Hero Header */
+        header {
+            background: linear-gradient(135deg, #1a365d 0%, #2a4365 100%);
+            color: #ffffff;
+            padding: 4rem 2rem 5rem 2rem;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        header .subtitle {
+            font-size: 1.4rem;
+            color: #e2e8f0;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .meta-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .meta-item .label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #cbd5e0;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .meta-item .value {
+            font-weight: 500;
+            font-size: 1.05rem;
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1100px;
+            margin: -2.5rem auto 4rem auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Navigation / Quick Links */
+        .quick-nav {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .quick-nav a {
+            color: var(--primary-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .quick-nav a:hover {
+            background: #ebf8ff;
+            color: var(--primary-color);
+        }
+
+        /* Section Styling */
+        section {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background-color: var(--primary-light);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .lead-text {
+            font-size: 1.15rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Lists & Features */
+        ul, ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: #edf2f7;
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f7fafc;
+        }
+
+        /* Week Cards Layout */
+        .weeks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .week-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .week-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .week-header {
+            background: #edf2f7;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .week-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .week-date {
+            background: var(--primary-light);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .week-body {
+            padding: 1.5rem;
+        }
+
+        .week-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin: 1rem 0 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .week-section-title::before {
+            content: '▪';
+            color: var(--accent-color);
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .assignment-box {
+            background: #fffaf0;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .assignment-title {
+            font-weight: 700;
+            color: #dd6b20;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        /* Summary Statement */
+        .summary-banner {
+            background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .summary-banner p {
+            font-size: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin: 0.2rem;
+        }
+
+        /* Grid for Assessment */
+        .ratio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .ratio-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .ratio-num {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .ratio-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            header .subtitle { font-size: 1.1rem; }
+            section { padding: 1.5rem; }
+            .week-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1>北市大暑期地球科學課程計畫</h1>
+            <div class="subtitle">主題：地震學、地球物理與 AI／Agent 輔助教學實作</div>
+            
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <span class="label">課程時間</span>
+                    <span class="value">2026/7/17 起 (每週五上午)</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">課程時數</span>
+                    <span class="value">共 6 週，每次 4 小時</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">參與對象</span>
+                    <span class="value">中小學現職教師</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">課程精神</span>
+                    <span class="value">教學相長・動手做・啟發創造力</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <div class="quick-nav">
+            <a href="#positioning">課程定位</a>
+            <a href="#goals">核心目標</a>
+            <a href="#schedule">課程總表</a>
+            <a href="#workflow">每週流程</a>
+            <a href="#weeks-detail">每週詳細內容</a>
+            <a href="#university-extend">大學部延伸</a>
+            <a href="#grading">評量方式</a>
+        </div>
+
+        <section id="positioning">
+            <h2>一、課程定位</h2>
+            <p class="lead-text">本課程是為中小學現職教師設計的暑期地球科學課程，內容以<strong>地震學與地球物理學</strong>為主軸，同時導入 AI／Agent 工具與雲端平台，讓教師能把地震學知識轉化為可帶回學校使用的教材、互動網頁、資料分析活動與教學專題。</p>
+            <p>本課程也可作為開學後「地球物理學」課程的前導與素材庫。暑期課程偏重教師研習、動手做與教學轉化；開學後課程則可在相同素材基礎上加深理論、數學、資料分析與研究應用。</p>
+        </section>
+
+        <section id="goals">
+            <h2>二、課程核心目標</h2>
+            <ol>
+                <li>建立中小學教師對地震學與地球物理學的基本理解。</li>
+                <li>學會使用真實地震資料進行簡單分析與教學設計。</li>
+                <li>練習將地震學概念轉化成中小學可理解的活動。</li>
+                <li>熟悉 <span class="badge">opencode</span> <span class="badge">Antigravity CLI</span> <span class="badge">Hermes agent</span> <span class="badge">GitHub</span> <span class="badge">Hugging Face</span> <span class="badge">Vercel</span> <span class="badge">Google GAS</span> <span class="badge">Google GWS</span> 等工具。</li>
+                <li>透過 Google GWS 與 GAS 建立教學自動化、資料收集與成果展示流程。</li>
+                <li>每週完成一個可檢核的作業。</li>
+                <li>安排一次野外實驗或簡易地震儀觀測活動。</li>
+                <li>最後產出一份可帶回學校使用的地震教學作品。</li>
+            </ol>
+        </section>
+
+        <section id="schedule">
+            <h2>三、6 週課程總表與可檢核作業</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>週次</th>
+                            <th>日期</th>
+                            <th>主題</th>
+                            <th>工具／案例</th>
+                            <th>可檢核作業</th>
+                            <th>檢核標準</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Week 1</strong></td>
+                            <td>7/17</td>
+                            <td>課程介紹、帳號申請、軟體安裝、工作流程建立</td>
+                            <td>Google GWS, GitHub, Hugging Face, Vercel, GAS, opencode, Antigravity CLI, Hermes agent</td>
+                            <td><strong>作業 1：完成個人數位學習工作區</strong></td>
+                            <td>繳交帳號清單、GitHub repo 連結、Google Drive 資料夾截圖、GAS 測試表單連結</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 2</strong></td>
+                            <td>7/24</td>
+                            <td>地震儀、加速度、地震動與震度</td>
+                            <td>手機感測器, Google Sheets, GAS, IRIS ground-shaking activity</td>
+                            <td><strong>作業 2：完成簡易震動觀測活動</strong></td>
+                            <td>繳交一筆震動資料、一張圖表、一份學生學習單、一段 200 字教學說明</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 3</strong></td>
+                            <td>7/31</td>
+                            <td>P-S 到時差、旅行時間曲線與震央定位</td>
+                            <td>IRIS 震央定位活動, Python, opencode, GitHub</td>
+                            <td><strong>作業 3：完成震央定位教學範例</strong></td>
+                            <td>繳交 P/S 到時表、三測站定位圖、GitHub 程式或試算表連結、學生提問設計</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 4</strong></td>
+                            <td>8/7</td>
+                            <td>課本第 4 章精讀與真實地震波形資料</td>
+                            <td>Introduction to Earthquake Seismology 第 4 章, jAmaSeis, Hugging Face Dataset</td>
+                            <td><strong>作業 4：完成第 4 章導讀與波形分析小報告</strong></td>
+                            <td>繳交一頁中文導讀、一張波形圖、三個教學重點、一段反思</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 5</strong></td>
+                            <td>8/14</td>
+                            <td>規模、震度、場址效應與建物反應</td>
+                            <td>IRIS Magnitude/Intensity, Buildings in Earthquakes, Vercel, GAS</td>
+                            <td><strong>作業 5：完成地震防災互動網頁初版</strong></td>
+                            <td>繳交網頁連結、規模 vs 震度說明、場址效應示意、學生互動題</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 6</strong></td>
+                            <td>8/21</td>
+                            <td>野外實驗、成果整合與教案發表</td>
+                            <td>地震儀或手機感測器, Teachable Moments, Hermes agent, GitHub Pages</td>
+                            <td><strong>作業 6：完成期末教學作品與 5–7 分鐘發表</strong></td>
+                            <td>繳交作品連結、教案、學習單、資料或展示圖、成果簡報</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="workflow">
+            <h2>四、每週 4 小時固定流程</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">時間</th>
+                            <th>活動內容</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>0:00–0:20</strong></td>
+                            <td><strong>本週導入：</strong>台灣地震案例、新聞、課程目標</td>
+                        </tr>
+                        <tr>
+                            <td><strong>0:20–1:10</strong></td>
+                            <td><strong>核心概念：</strong>地震學／地球物理核心概念講解</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1:10–2:00</strong></td>
+                            <td><strong>案例實作：</strong>IRIS 案例、真實資料或教學活動操作</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2:00–3:20</strong></td>
+                            <td><strong>數位轉化：</strong>數位工具實作與教材製作</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3:20–4:00</strong></td>
+                            <td><strong>整理分享：</strong>作業說明、小組分享、作品整理、下週任務</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic;">* 註：第一週因為要建立環境，所以調整為「介紹與安裝工作坊」，不進行正式 IRIS 活動實作。</p>
+        </section>
+
+        <section id="weeks-detail">
+            <h2>五、每週詳細課程內容與作業規範</h2>
+            
+            <div class="weeks-container">
+                
+                <!-- Week 1 -->
+                <div class="week-card">
+                    <div class="week-header">
+                        <div class="week-title">Week 1：課程介紹、帳號申請、軟體安裝與工作流程建立</div>
+                        <div class="week-date">2026/7/17</div>
+                    </div>
+                    <div class="week-body">
+                        <p><strong>本週定位：</strong>第一週不安排 Human Wave Demo。這週的重點是讓所有教師都能建立後續 5 週會使用的基本環境，包含帳號、軟體、雲端資料夾、GitHub repo、AI／Agent 工具與 Google GAS 測試。</p>
+                        
+                        <div class="week-section-title">本週學習重點</div>
+                        <ul>
+                            <li>課程總覽與學習目標說明、建立 Google Drive 課程資料夾。</li>
+                            <li>建立 GitHub 帳號與個人 repo、Hugging Face 帳號、Vercel 帳號。</li>
+                            <li>測試 Google Forms、Sheets、Apps Script。</li>
+                            <li>安裝或確認 Git、VS Code、Python、Node.js、Java。</li>
+                            <li>安裝或導覽 opencode、Antigravity CLI、Hermes agent。</li>
+                            <li>瀏覽 IRIS InClass 地震學教學資源並撰寫個人學習目標。</li>
+                        </ul>
+
+                        <div class="assignment-box">
+                            <div class="assignment-title">可檢核作業 1：完成個人數位學習工作區</div>
+                            <p><strong>繳交內容：</strong></p>
+                            <p style="font-size: 0.9rem; color: var(--text-main);">1. Google Drive 個人課程資料夾截圖 | 2. GitHub 個人課程 repo 連結 | 3. Hugging Face 個人帳號頁面截圖或連結 | 4. Vercel 帳號建立完成截圖 | 5. Google Form 測試表單連結 | 6. Google Sheets 回應表截圖 | 7. GAS 測試成功截圖 | 8. 軟體安裝檢查表 | 9. 100–200 字個人學習目標。</p>
+                            
+                            <div class="table-responsive" style="margin-top: 1rem; background: #fff;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 0.5rem 1rem;">項目</th>
+                                            <th style="padding: 0.5rem 1rem;">通過標準</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>帳號</td><td>Google、GitHub、Hugging Face、Vercel 至少完成 3 項</td></tr>
+                                        <tr><td>GitHub</td><td>有建立 repo，且包含 README.md</td></tr>
+                                        <tr><td>Google GAS</td><td>能成功執行一段測試程式</td></tr>
+                                        <tr><td>安裝</td><td>Git、VS Code、Python 至少完成 2 項</td></tr>
+                                        <tr><td>學習目標</td><td>能說明自己想把哪個地震學概念轉成教學活動</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 2 -->
+                <div class="week-card">
+                    <div class="week-header">
+                        <div class="week-title">Week 2：地震儀、加速度、地震動與震度</div>
+                        <div class="week-date">2026/7/24</div>
+                    </div>
+                    <div class="week-body">
+                        <p><strong>本週主題：</strong>本週進入地震觀測的核心問題：地震儀到底記錄了什麼？地面搖晃如何被量化？震度和加速度有什麼關係？</p>
+                        <p><strong>教學活動：</strong>使用 IRIS 的 ground-shaking 類活動，讓學生透過三分量加速度計、手機、筆電或 USB 感測器理解地面搖晃與加速度測量。</p>
+                        
+                        <div class="assignment-box">
+                            <div class="assignment-title">可檢核作業 2：完成簡易震動觀測活動</div>
+                            <p><strong>繳交內容：</strong>1. 一筆手機或感測器震動紀錄 | 2. 一張 Google Sheets 圖表 | 3. 一份學生版學習單 | 4. 一份教師版教學說明 | 5. 200 字說明：這個活動如何幫助學生理解震度？</p>
+                            
+                            <div class="table-responsive" style="margin-top: 1rem; background: #fff;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 0.5rem 1rem;">項目</th>
+                                            <th style="padding: 0.5rem 1rem;">通過標準</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>資料</td><td>至少有一筆實測或模擬震動資料</td></tr>
+                                        <tr><td>圖表</td><td>能呈現震動強弱變化</td></tr>
+                                        <tr><td>學習單</td><td>至少有 3 題學生問題</td></tr>
+                                        <tr><td>教學說明</td><td>能清楚區分「感覺到的搖晃」與「儀器量測」</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 3 -->
+                <div class="week-card">
+                    <div class="week-header">
+                        <div class="week-title">Week 3：P-S 到時差、旅行時間曲線與震央定位</div>
+                        <div class="week-date">2026/7/31</div>
+                    </div>
+                    <div class="week-body">
+                        <p><strong>本週主題：</strong>本週回答一個地震學基本問題：只靠幾個測站的地震波紀錄，如何知道地震發生在哪裡？</p>
+                        <p><strong>教學活動：</strong>使用 IRIS 的 震央定位活動。該活動讓學生從三分量地震紀錄中辨識 P 波與 S 波，量測 P-S 到時差，再用旅行時間曲線估算震央距，最後進行震央定位。</p>
+                        
+                        <div class="assignment-box">
+                            <div class="assignment-title">可檢核作業 3：完成震央定位教學範例</div>
+                            <p><strong>繳交內容：</strong>1. 三個測站的 P 波與 S 波到時表 | 2. P-S 到時差計算表 | 3. 震央距估算結果 | 4. 三測站定位圖 | 5. GitHub 程式或 Google Sheets 連結 | 6. 一份學生提問設計。</p>
+                            
+                            <div class="table-responsive" style="margin-top: 1rem; background: #fff;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 0.5rem 1rem;">項目</th>
+                                            <th style="padding: 0.5rem 1rem;">通過標準</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>P/S 到時</td><td>能正確標示至少三個測站資料</td></tr>
+                                        <tr><td>震央距</td><td>能由 P-S 到時差推估距離</td></tr>
+                                        <tr><td>定位圖</td><td>能畫出三個距離圓或等效定位圖</td></tr>
+                                        <tr><td>教學設計</td><td>能解釋為什麼至少需要三個測站</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 4 -->
+                <div class="week-card">
+                    <div class="week-header">
+                        <div class="week-title">Week 4：課本第 4 章精讀與真實地震波形資料</div>
+                        <div class="week-date">2026/8/7</div>
+                    </div>
+                    <div class="week-body">
+                        <p><strong>本週主題：</strong>本週將指定地震學課本 <em>Introduction to Earthquake Seismology</em> 第 4 章納入課程。第 4 章作為理論深化週，連結前幾週的地震觀測、地震波與定位概念。</p>
+                        <p><strong>教學活動：</strong>使用 jAmaSeis 或其他即時地震波形工具，搭配真實地震事件資料，進行波形觀察、P/S 波辨識與教學轉化。</p>
+                        
+                        <div class="assignment-box">
+                            <div class="assignment-title">可檢核作業 4：完成第 4 章導讀與波形分析小報告</div>
+                            <p><strong>繳交內容：</strong>1. 一頁第 4 章中文導讀 | 2. 一張真實地震波形圖或截圖 | 3. 標示 P 波、S 波或其他重要波相 | 4. 三個可教給中小學生的概念 | 5. 一段 200 字反思：哪些內容適合中小學？哪些適合開學後地球物理學？</p>
+                            
+                            <div class="table-responsive" style="margin-top: 1rem; background: #fff;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 0.5rem 1rem;">項目</th>
+                                            <th style="padding: 0.5rem 1rem;">通過標準</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>導讀</td><td>能用教師可理解語言整理第 4 章重點</td></tr>
+                                        <tr><td>波形</td><td>至少有一張真實或教學用波形圖</td></tr>
+                                        <tr><td>標示</td><td>至少標出一個可討論的波形特徵</td></tr>
+                                        <tr><td>教學轉化</td><td>能區分「中小學版本」與「大學地球物理版本」</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 5 -->
+                <div class="week-card">
+                    <div class="week-header">
+                        <div class="week-title">Week 5：規模、震度、場址效應與建物反應</div>
+                        <div class="week-date">2026/8/14</div>
+                    </div>
+                    <div class="week-body">
+                        <p><strong>本週主題：</strong>本週處理地震教學中最容易混淆、也最貼近防災教育的問題：地震規模和震度有什麼不同？為什麼同一場地震，不同地方搖晃差很多？為什麼建物與地盤會影響人的感受？</p>
+                        <p><strong>教學活動：</strong>使用 IRIS 的 Magnitude and Intensity 或 Earthquake Magnitude and Intensity 類資源，並搭配建物反應與場址效應案例。</p>
+                        
+                        <div class="assignment-box">
+                            <div class="assignment-title">可檢核作業 5：完成地震防災互動網頁初版</div>
+                            <p><strong>繳交內容：</strong>1. GitHub Pages 或 Vercel 網頁連結 | 2. 一張「規模 vs 震度」比較圖 | 3. 一段 field text / 場址效應說明 | 4. 一個學生互動問題 | 5. 一份教師教學提醒 | 6. 一段 200 字防災教育應用說明。</p>
+                            
+                            <div class="table-responsive" style="margin-top: 1rem; background: #fff;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 0.5rem 1rem;">項目</th>
+                                            <th style="padding: 0.5rem 1rem;">通過標準</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>網頁</td><td>可公開開啟或可由課程內部開啟</td></tr>
+                                        <tr><td>概念</td><td>能清楚區分規模與震度</td></tr>
+                                        <tr><td>場址效應</td><td>能說明不同地點搖晃差異</td></tr>
+                                        <tr><td>教學互動</td><td>至少有一題學生可回答的互動問題</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 6 -->
+                <div class="week-card">
+                    <div class="week-header">
+                        <div class="week-title">Week 6：野外實驗、成果整合與教案發表</div>
+                        <div class="week-date">2026/8/21</div>
+                    </div>
+                    <div class="week-body">
+                        <p><strong>本週主題：</strong>本週將前 5 週內容整合為教師可帶回學校使用的作品。若儀器借用順利，安排一次野外或校園地震儀／微動觀測；若無法借到地震儀，則改用手機感測器、公開測站資料或 IRIS 即時資料進行替代活動。</p>
+                        <p><strong>教學活動：</strong>可搭配 IRIS Teachable Moments 或近期地震案例，作為成果發表或教案改寫素材。</p>
+                        
+                        <div class="assignment-box">
+                            <div class="assignment-title">可檢核作業 6：完成期末教學作品與 5–7 分鐘發表</div>
+                            <p><strong>繳交內容：</strong>1. 一份完整教案 | 2. 一份學生學習單 | 3. 一份教師說明 | 4. 一個數位作品連結 | 5. 一份成果簡報 | 6. 一段 300 字課程反思 | 7. 5–7 分鐘口頭發表。</p>
+                            
+                            <div class="table-responsive" style="margin-top: 1rem; background: #fff;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 0.5rem 1rem;">項目</th>
+                                            <th style="padding: 0.5rem 1rem;">通過標準</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>科學概念</td><td>至少包含一個明確地震學或地球物理概念</td></tr>
+                                        <tr><td>教學活動</td><td>中小學生可操作或可討論</td></tr>
+                                        <tr><td>數位作品</td><td>有可開啟連結或可展示檔案</td></tr>
+                                        <tr><td>發表</td><td>能說明設計理念、操作流程與教學價值</td></tr>
+                                        <tr><td>反思</td><td>能說明如何啟發學生興趣與創造力</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="university-extend">
+            <h2>六、開學後「地球物理學」課程共用方式</h2>
+            <p>本暑期課程的成果與材料，將在開學後延伸銜接至大學部正規「地球物理學」課程中：</p>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">暑期課程內容</th>
+                            <th>開學後地球物理學可延伸方向</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Week 1 工具環境</strong></td>
+                            <td>大學課程的 GitHub／資料分析工作流</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 2 地震動與震度</strong></td>
+                            <td>地震動參數、PGA、PGV、震度換算</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 3 震央定位</strong></td>
+                            <td>旅行時間、定位反演、不確定性分析</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 4 第 4 章精讀</strong></td>
+                            <td>理論主軸、指定閱讀、波形分析</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 5 場址效應</strong></td>
+                            <td>淺層地球物理、地盤放大、地震工程</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 6 野外實驗</strong></td>
+                            <td>儀器觀測、資料處理、專題報告</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="grading">
+            <h2>七、評量方式</h2>
+            <div class="ratio-grid">
+                <div class="ratio-card">
+                    <div class="ratio-num">60%</div>
+                    <div class="ratio-label">每週可檢核作業</div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">每週 10%，共 6 週份量</p>
+                </div>
+                <div class="ratio-card">
+                    <div class="ratio-num">20%</div>
+                    <div class="ratio-label">課堂參與與討論</div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">包含小組討論、工具實作與教學轉化</p>
+                </div>
+                <div class="ratio-card">
+                    <div class="ratio-num">20%</div>
+                    <div class="ratio-label">期末成果發表</div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">第 6 週最終作品與口頭成果發表</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="summary-banner">
+            <h2>課程總結</h2>
+            <p>「這門課的目標不是只教地震學，而是讓中小學教師親手把地震學、地球物理、真實資料、AI agent、雲端平台與互動教材整合起來，做出能帶回學校、啟發學生興趣與創造力的地球科學教學作品。」</p>
+        </div>
+
+        <footer>
+            <p>© 2026 北市大暑期地球科學課程教學團隊. All Rights Reserved.</p>
+            <p style="font-size: 0.8rem; margin-top: 0.5rem;">Deployed on GitHub Pages</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
